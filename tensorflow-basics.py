@@ -1,7 +1,7 @@
 import tensorflow as tf
 import numpy as np
 import tensorflow.examples.tutorials.mnist.input_data as input_data
-#from tensorflow.python.ops import rnn, rnn_cell
+#import rnn, rnn_cell
 
 
 
@@ -37,4 +37,15 @@ w = tf.Variable(0.0, name="weights")
 #-------------- To train model, use variables to hold/update parameters
 #------------------- Variables are in-memory buffers containing tensors
 y_model = model(X,w)
+#----------------------------------- Get square error for cost function
+cost = tf.square(Y - y_model)
+#--------- Constructs optimizer to minimize cost, then fit line to data
+train_op = tf.train.GradientDescentOptimizer(0.01).minimize(cost)
 
+with tf.Session() as sess:
+	#------------------------ Runs initialization under Variable object
+	tf.global_variables_initializer().run()
+	for i in range(100):
+		for (x,y) in zip(trX,trY):
+			sess.run(train_op, feed_dict={X: x, Y: y})
+	print sess.run(w)
